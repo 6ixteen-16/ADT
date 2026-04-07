@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ADT Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="glass-panel">
+            <h1>Advanced ADT Visualizer</h1>
+            <div class="group-info">
+                <ul class="team-list">
+                    <li><strong>Ahabwe Charles Kitegye</strong></li>
+                    <li>Person 2 <span class="reg-badge">[Reg No]</span></li>
+                    <li>Person 3 <span class="reg-badge">[Reg No]</span></li>
+                    <li>Person 4 <span class="reg-badge">[Reg No]</span></li>
+                </ul>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="adt-nav">
+                <button class="nav-btn active" data-target="view-stack">Stack</button>
+                <button class="nav-btn" data-target="view-queue">Queue</button>
+                <button class="nav-btn" data-target="view-list">Linked List</button>
+                <button class="nav-btn" data-target="view-tree">Binary Tree</button>
+                <button class="nav-btn" data-target="view-graph">Graph</button>
+            </nav>
+        </header>
+
+        <!-- ================= STACK VIEW ================= -->
+        <main class="main-content active" id="view-stack">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="stackInput" placeholder="Enter stack value..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="pushBtn" class="btn push-btn">Push</button>
+                    <button id="popBtn" class="btn pop-btn">Pop</button>
+                    <button id="peekBtn" class="btn peek-btn">Peek</button>
+                    <button id="isEmptyBtn" class="btn is-empty-btn">Is Empty?</button>
+                    <button id="clearBtn" class="btn clear-btn">Clear Stack</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="stackStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Current Size:</strong> <span id="stackSize" class="glow-text">0</span> (Max 10)</p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>All core operations: <strong>O(1)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Stack Visualization</h2>
+                <div class="stack-environment">
+                    <div class="stack-container" id="stackDisplay"></div>
+                    <div class="stack-base"></div> 
+                </div>
+            </div>
+        </main>
+
+        <!-- ================= QUEUE VIEW ================= -->
+        <main class="main-content" id="view-queue" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="queueInput" placeholder="Enter queue value..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="enqueueBtn" class="btn push-btn">Enqueue</button>
+                    <button id="dequeueBtn" class="btn pop-btn">Dequeue</button>
+                    <button id="frontBtn" class="btn peek-btn">Front</button>
+                    <button id="rearBtn" class="btn peek-btn">Rear</button>
+                    <button id="qIsEmptyBtn" class="btn is-empty-btn">Is Empty?</button>
+                    <button id="qClearBtn" class="btn clear-btn" style="grid-column: span 1;">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="queueStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Current Size:</strong> <span id="queueSize" class="glow-text">0</span> (Max 10)</p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Core ops: Dequeue is <strong>O(n)</strong>, Enqueue <strong>O(1)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Queue Visualization</h2>
+                <div class="queue-environment">
+                    <div class="queue-exit-zone">&larr; Front</div>
+                    <div class="queue-container" id="queueDisplay"></div>
+                    <div class="queue-enter-zone">Rear &larr;</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================= LINKED LIST VIEW ================= -->
+        <main class="main-content" id="view-list" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="listInput" placeholder="Enter numeric value..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="addNodeBtn" class="btn push-btn">Add Node</button>
+                    <button id="removeNodeBtn" class="btn pop-btn">Remove Value</button>
+                    <button id="findNodeBtn" class="btn peek-btn">Find Value</button>
+                    <button id="listClearBtn" class="btn clear-btn" style="grid-column: span 1;">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="listStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Current Size:</strong> <span id="listSize" class="glow-text">0</span> (Max 10)</p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Find/Remove: <strong>O(n)</strong> | Add: <strong>O(1)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Linked List Visualization</h2>
+                <div class="list-environment">
+                    <div class="list-container" id="listDisplay"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================= BINARY TREE VIEW ================= -->
+        <main class="main-content" id="view-tree" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="treeInput" placeholder="Enter numeric value..." autocomplete="off">
+                </div>
+                <div class="button-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <button id="insertTreeBtn" class="btn push-btn">Insert</button>
+                    <button id="findTreeBtn" class="btn peek-btn">Find</button>
+                    <button id="treeClearBtn" class="btn clear-btn" style="grid-column: span 1;">Clear</button>
+                    <button id="inorderBtn" class="btn is-empty-btn">Inorder</button>
+                    <button id="preorderBtn" class="btn is-empty-btn">Preorder</button>
+                    <button id="postorderBtn" class="btn is-empty-btn">Postorder</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="treeStatus" class="glow-text">System Ready.</span></p>
+                    <p id="inorderResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Insert/Find: Average <strong>O(log n)</strong>, Worst <strong>O(n)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel container-relative">
+                <h2>Live BST Visualization</h2>
+                <div class="tree-environment" id="treeDisplay"></div>
+            </div>
+        </main>
+
+        <!-- ================= GRAPH VIEW ================= -->
+        <main class="main-content" id="view-graph" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="vertexInput" placeholder="Vertex Name (e.g., 1)" autocomplete="off">
+                </div>
+                <div class="button-grid" style="grid-template-columns: 1fr;">
+                    <button id="addVertexBtn" class="btn push-btn">Add Vertex</button>
+                </div>
+                
+                <div class="input-section" style="display: flex; gap: 5px; margin-top: 15px;">
+                    <input type="number" id="edgeV1" placeholder="V1" autocomplete="off" style="width:50%;">
+                    <input type="number" id="edgeV2" placeholder="V2" autocomplete="off" style="width:50%;">
+                </div>
+                <div class="button-grid">
+                    <button id="addEdgeBtn" class="btn peek-btn">Add Edge</button>
+                    <button id="removeEdgeBtn" class="btn pop-btn">Remove Edge</button>
+                </div>
+                
+                <div class="button-grid">
+                    <button id="bfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">BFS Route</button>
+                    <button id="dfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">DFS Route</button>
+                </div>
+                
+                <div class="button-grid" style="margin-top:15px; grid-template-columns: 1fr;">
+                    <button id="graphClearBtn" class="btn clear-btn">Clear Graph</button>
+                </div>
+                
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="graphStatus" class="glow-text">System Ready.</span></p>
+                    <p id="graphResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Add Vertex/Edge: <strong>O(1)</strong> | Remove Edge: <strong>O(|E|)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space (Adjacency List): <strong>O(|V| + |E|)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel container-relative">
+                <h2>Live Graph Visualization</h2>
+                <div class="graph-environment" id="graphDisplay">
+                    <!-- SVG lines injected here -->
+                    <svg id="graphSvgEdges"></svg>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
