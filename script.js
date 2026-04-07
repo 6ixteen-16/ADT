@@ -1,4 +1,3 @@
-// ================= CLASSES =================
 class Stack {
     constructor() { this.items = []; }
     push(element) { this.items.push(element); }
@@ -189,8 +188,7 @@ function animatePath(pathArray, domSelector, statusBox, logPrefix) {
     }
     step();
 }
-
-// ================= NAVIGATION =================
+//navigation
 const navBtns = document.querySelectorAll('.nav-btn');
 const views = document.querySelectorAll('.main-content');
 navBtns.forEach(btn => {
@@ -202,7 +200,7 @@ navBtns.forEach(btn => {
     });
 });
 
-// ================= STACK UI =================
+//stack intface
 const myStack = new Stack();
 const stackInput = document.getElementById('stackInput');
 const stackDisplay = document.getElementById('stackDisplay');
@@ -265,7 +263,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 stackInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('pushBtn').click());
 
 
-// ================= QUEUE UI =================
+//que intface
 const myQueue = new Queue();
 const queueInput = document.getElementById('queueInput');
 const queueDisplay = document.getElementById('queueDisplay');
@@ -331,7 +329,7 @@ document.getElementById('qClearBtn').addEventListener('click', () => {
 queueInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('enqueueBtn').click());
 
 
-// ================= LINKED LIST UI =================
+//linkel intface
 const myList = new LinkedList();
 const listInput = document.getElementById('listInput');
 const listDisplay = document.getElementById('listDisplay');
@@ -404,9 +402,7 @@ document.getElementById('listClearBtn').addEventListener('click', () => {
     myList.clear(); renderList(); listStatus.innerText = "List cleared.";
 });
 listInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('addNodeBtn').click());
-
-
-// ================= BINARY TREE UI =================
+//tree intface
 const myTree = new BinaryTree();
 const treeInput = document.getElementById('treeInput');
 const treeDisplay = document.getElementById('treeDisplay');
@@ -416,13 +412,10 @@ const inorderResultBox = document.getElementById('inorderResultBox');
 function renderTree() {
     treeDisplay.innerHTML = '';
     if (!myTree.root) return;
-
     const rootW = treeDisplay.clientWidth;
     // Recursive render using absolute pos
     function drawNode(node, x, y, xOffset) {
         if (!node) return;
-
-        // Draw lines to children first so they are under the spheres
         if (node.left) {
             const childX = x - xOffset;
             const childY = y + 70;
@@ -435,8 +428,6 @@ function renderTree() {
             drawLine(x, y + 22, childX, childY - 22);
             drawNode(node.right, childX, childY, xOffset / 2);
         }
-
-        // Draw the node itself
         const dNode = document.createElement('div');
         dNode.className = 'tree-node';
         dNode.innerText = node.value;
@@ -445,7 +436,6 @@ function renderTree() {
         dNode.dataset.val = node.value; // For finding
         treeDisplay.appendChild(dNode);
     }
-
     function drawLine(x1, y1, x2, y2) {
         const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
         const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
@@ -460,10 +450,8 @@ function renderTree() {
 
     drawNode(myTree.root, rootW / 2, 40, rootW / 4);
 }
-
 document.getElementById('insertTreeBtn').addEventListener('click', () => {
     if (document.querySelectorAll('.tree-node').length >= 10) { treeStatus.innerText = "Error: Max 10 nodes allowed."; return; }
-
     const val = parseFloat(treeInput.value);
     if (!isNaN(val)) {
         myTree.insert(val);
@@ -507,12 +495,8 @@ document.getElementById('treeClearBtn').addEventListener('click', () => {
     myTree.clear(); renderTree(); treeStatus.innerText = "Tree Cleared."; inorderResultBox.style.display = 'none';
 });
 treeInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('insertTreeBtn').click());
-
-// Re-render tree on resize to maintain correct positions
 window.addEventListener('resize', renderTree);
-
-
-// ================= GRAPH UI =================
+//graph interface
 const myGraph = new Graph();
 const vInput = document.getElementById('vertexInput');
 const edgeV1 = document.getElementById('edgeV1');
@@ -520,10 +504,7 @@ const edgeV2 = document.getElementById('edgeV2');
 const graphDisplay = document.getElementById('graphDisplay');
 const graphSvgEdges = document.getElementById('graphSvgEdges');
 const graphStatus = document.getElementById('graphStatus');
-// We will store coordinates roughly to allow consistent rendering
 const vertexCoords = {};
-
-
 function updateGraphEdges() {
     const svg = document.getElementById('graphSvgEdges');
     if (!svg) return;
@@ -549,11 +530,8 @@ function updateGraphEdges() {
 }
 
 function renderGraph() {
-    // Clear DOM mostly leaving SVG wrapper
     graphDisplay.innerHTML = '<svg id="graphSvgEdges"></svg>';
     updateGraphEdges();
-
-    // Draw all Vertices
     Object.keys(myGraph.adjacencyList).forEach(v => {
         const dNode = document.createElement('div');
         dNode.className = 'graph-node';
@@ -561,20 +539,14 @@ function renderGraph() {
         dNode.dataset.v = v; 
         dNode.style.left = `${vertexCoords[v].x}px`;
         dNode.style.top = `${vertexCoords[v].y}px`;
-        
-
-        
         graphDisplay.appendChild(dNode);
     });
 }
-
 document.getElementById('addVertexBtn').addEventListener('click', () => {
     if (Object.keys(myGraph.adjacencyList).length >= 10) { graphStatus.innerText = "Error: Max 10 vertices allowed."; return; }
-
     const v = parseFloat(vInput.value);
     if (!isNaN(v)) {
         if (myGraph.addVertex(v)) {
-            // Assign random coord within bounds
             const w = graphDisplay.clientWidth;
             const h = graphDisplay.clientHeight;
             vertexCoords[v] = { x: Math.random() * (w - 100) + 50, y: Math.random() * (h - 100) + 50 };
@@ -586,7 +558,6 @@ document.getElementById('addVertexBtn').addEventListener('click', () => {
         }
     } else graphStatus.innerText = "Error: Numeric vertex name required.";
 });
-
 document.getElementById('addEdgeBtn').addEventListener('click', () => {
     const v1 = parseFloat(edgeV1.value);
     const v2 = parseFloat(edgeV2.value);
@@ -614,6 +585,8 @@ document.getElementById('removeEdgeBtn').addEventListener('click', () => {
     } else graphStatus.innerText = "Error: Valid edge numbers required.";
 });
 
+
+
 document.getElementById('bfsBtn').addEventListener('click', () => {
     const keys = Object.keys(myGraph.adjacencyList);
     if (!keys.length) { graphStatus.innerText = "Error: Graph is empty."; return; }
@@ -631,13 +604,11 @@ document.getElementById('dfsBtn').addEventListener('click', () => {
     if (!keys.length) { graphStatus.innerText = "Error: Graph is empty."; return; }
     
     const inputVal = parseFloat(vInput.value);
-    let startObj = !isNaN(inputVal) && myGraph.adjacencyList[inputVal] ? inputVal : keys[0];
-    
+    let startObj = !isNaN(inputVal) && myGraph.adjacencyList[inputVal] ? inputVal : keys[0]; 
     graphStatus.innerText = `DFS Route from [ ${startObj} ]`;
     const graphResultBox = document.getElementById('graphResultBox');
     animatePath(myGraph.dfs(startObj), '.graph-node', graphResultBox, 'DFS Path');
 });
-
 document.getElementById('graphClearBtn').addEventListener('click', () => {
     myGraph.clear();
     for (let k in vertexCoords) delete vertexCoords[k];
