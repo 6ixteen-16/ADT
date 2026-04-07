@@ -18,8 +18,7 @@
                     <li>Person 4 <span class="reg-badge">[Reg No]</span></li>
                 </ul>
             </div>
-            
-            <!-- Navigation -->
+            <!--buttons-->
             <nav class="adt-nav">
                 <button class="nav-btn active" data-target="view-stack">Stack</button>
                 <button class="nav-btn" data-target="view-queue">Queue</button>
@@ -29,7 +28,7 @@
             </nav>
         </header>
 
-        <!-- ================= STACK VIEW ================= -->
+        <!--stac -->
         <main class="main-content active" id="view-stack">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -67,7 +66,7 @@
             </div>
         </main>
 
-        <!-- ================= QUEUE VIEW ================= -->
+        <!--que-->
         <main class="main-content" id="view-queue" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -107,7 +106,7 @@
             </div>
         </main>
 
-        <!-- ================= LINKED LIST VIEW ================= -->
+        <!--llist -->
         <main class="main-content" id="view-list" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -142,8 +141,7 @@
                 </div>
             </div>
         </main>
-
-        <!-- ================= BINARY TREE VIEW ================= -->
+        <!--tree-->
         <main class="main-content" id="view-tree" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -178,8 +176,7 @@
                 <div class="tree-environment" id="treeDisplay"></div>
             </div>
         </main>
-
-        <!-- ================= GRAPH VIEW ================= -->
+        <!--graph-->
         <main class="main-content" id="view-graph" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -188,7 +185,6 @@
                 <div class="button-grid" style="grid-template-columns: 1fr;">
                     <button id="addVertexBtn" class="btn push-btn">Add Vertex</button>
                 </div>
-                
                 <div class="input-section" style="display: flex; gap: 5px; margin-top: 15px;">
                     <input type="number" id="edgeV1" placeholder="V1" autocomplete="off" style="width:50%;">
                     <input type="number" id="edgeV2" placeholder="V2" autocomplete="off" style="width:50%;">
@@ -196,17 +192,14 @@
                 <div class="button-grid">
                     <button id="addEdgeBtn" class="btn peek-btn">Add Edge</button>
                     <button id="removeEdgeBtn" class="btn pop-btn">Remove Edge</button>
-                </div>
-                
+                </div>                
                 <div class="button-grid">
                     <button id="bfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">BFS Route</button>
                     <button id="dfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">DFS Route</button>
-                </div>
-                
+                </div>                
                 <div class="button-grid" style="margin-top:15px; grid-template-columns: 1fr;">
                     <button id="graphClearBtn" class="btn clear-btn">Clear Graph</button>
-                </div>
-                
+                </div>                
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="graphStatus" class="glow-text">System Ready.</span></p>
                     <p id="graphResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
@@ -226,8 +219,7 @@
             <div class="visualizer-panel glass-panel container-relative">
                 <h2>Live Graph Visualization</h2>
                 <div class="graph-environment" id="graphDisplay">
-                    <!-- SVG lines injected here -->
-                    <svg id="graphSvgEdges"></svg>
+                    <svg id="graphSvgEdges"></svg> <!--lines for th graph-->
                 </div>
             </div>
         </main>
