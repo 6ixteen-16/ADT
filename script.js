@@ -51,25 +51,49 @@ class LinkedList {
     getSize() { return this.size; }
     clear() { this.head = null; this.size = 0; }
 }
-class treeNode {
-    constructor(value) { this.value = value; this.left = null; this.right = null; }
+class TreeNode {
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
 }
+
 class BinaryTree {
-    constructor() { this.root = null; }
+    constructor() {
+        this.root = null;
+        this.nodeCount = 0;
+    }
+
     insert(value) {
-        const newNode = new treeNode(value);
-        if (!this.root) { this.root = newNode; return; }
+        const newNode = new TreeNode(value);
+        if (!this.root) {
+            this.root = newNode;
+            this.nodeCount++;
+            return true;
+        }
         let current = this.root;
         while (true) {
             if (value < current.value) {
-                if (!current.left) { current.left = newNode; return; }
+                if (!current.left) {
+                    current.left = newNode;
+                    this.nodeCount++;
+                    return true;
+                }
                 current = current.left;
-            } else {
-                if (!current.right) { current.right = newNode; return; }
+            } else if (value > current.value) {
+                if (!current.right) {
+                    current.right = newNode;
+                    this.nodeCount++;
+                    return true;
+                }
                 current = current.right;
+            } else {
+                return false;
             }
         }
     }
+
     find(value) {
         let current = this.root;
         while (current) {
@@ -78,7 +102,10 @@ class BinaryTree {
         }
         return false;
     }
-    inorder(node = this.root, result = []) {
+
+    inorder(node, result) {
+        if (node === undefined) node = this.root;
+        if (result === undefined) result = [];
         if (node) {
             this.inorder(node.left, result);
             result.push(node.value);
@@ -86,7 +113,10 @@ class BinaryTree {
         }
         return result;
     }
-    preorder(node = this.root, result = []) {
+
+    preorder(node, result) {
+        if (node === undefined) node = this.root;
+        if (result === undefined) result = [];
         if (node) {
             result.push(node.value);
             this.preorder(node.left, result);
@@ -94,7 +124,10 @@ class BinaryTree {
         }
         return result;
     }
-    postorder(node = this.root, result = []) {
+
+    postorder(node, result) {
+        if (node === undefined) node = this.root;
+        if (result === undefined) result = [];
         if (node) {
             this.postorder(node.left, result);
             this.postorder(node.right, result);
@@ -102,69 +135,182 @@ class BinaryTree {
         }
         return result;
     }
-    clear() { this.root = null; }
+    getSize() {
+        return this.nodeCount;
+    }
+    clear() {
+        this.root = null;
+        this.nodeCount = 0;
+    }
+    remove(value) {
+        let nodeRemoved = false;
+
+        const removeNode = (node, key) => {
+            if (node === null) {
+                return null;
+            }
+            if (key < node.value) {
+                node.left = removeNode(node.left, key);
+                return node;
+            } else if (key > node.value) {
+                node.right = removeNode(node.right, key);
+                return node;
+            } else {
+                // Node found
+                nodeRemoved = true;
+
+                //no children(Leaf node)
+                if (node.left === null && node.right === null) {
+                    return null;
+                }
+                //One child
+                if (node.left === null) {
+                    return node.right;
+                } else if (node.right === null) {
+                    return node.left;
+                }
+                //2 children
+                //in-order successor(smallest node in the right subtree)
+                let tempNode = node.right;
+                while (tempNode.left !== null) {
+                    tempNode = tempNode.left;
+                }
+                node.value = tempNode.value; //value replacement
+                node.right = removeNode(node.right, tempNode.value);
+                return node;
+            }
+        };
+        this.root = removeNode(this.root, value);
+        if (nodeRemoved) {
+            this.nodeCount--;
+        }
+        return nodeRemoved;
+    }
 }
 class Graph {
-    constructor() { this.adjacencyList = {}; }
-    addVertex(vertex) { if (!this.adjacencyList[vertex]) { this.adjacencyList[vertex] = []; return true; } return false; }
+    constructor() {
+        this.adjacencyList = {};
+        this.vertexCount = 0;
+        this.edgeCount = 0;
+    }
+
+    addVertex(vertex) {
+        if (vertex === null || vertex === undefined) return false;
+        vertex = String(vertex);
+        if (!this.adjacencyList[vertex]) {
+            this.adjacencyList[vertex] = [];
+            this.vertexCount++;
+            return true;
+        }
+        return false;
+    }
+
     addEdge(v1, v2) {
+        v1 = String(v1);
+        v2 = String(v2);
+
+        if (v1 === v2) return false;
+
         if (this.adjacencyList[v1] && this.adjacencyList[v2]) {
-            if (!this.adjacencyList[v1].includes(v2)) this.adjacencyList[v1].push(v2);
-            if (!this.adjacencyList[v2].includes(v1)) this.adjacencyList[v2].push(v1);
-            return true;
+            if (!this.adjacencyList[v1].includes(v2)) {
+                this.adjacencyList[v1].push(v2);
+                this.adjacencyList[v2].push(v1);
+                this.edgeCount++;
+                return true;
+            }
+            return false;
         }
         return false;
     }
+
     removeEdge(v1, v2) {
+        v1 = String(v1);
+        v2 = String(v2);
+
         if (this.adjacencyList[v1] && this.adjacencyList[v2]) {
-            this.adjacencyList[v1] = this.adjacencyList[v1].filter(v => v !== v2);
-            this.adjacencyList[v2] = this.adjacencyList[v2].filter(v => v !== v1);
-            return true;
+            const idx1 = this.adjacencyList[v1].indexOf(v2);
+            const idx2 = this.adjacencyList[v2].indexOf(v1);
+
+            if (idx1 > -1 && idx2 > -1) {
+                this.adjacencyList[v1].splice(idx1, 1);
+                this.adjacencyList[v2].splice(idx2, 1);
+                this.edgeCount--;
+                return true;
+            }
         }
         return false;
     }
+
     removeVertex(vertex) {
+        vertex = String(vertex);
         if (this.adjacencyList[vertex]) {
             while (this.adjacencyList[vertex].length) {
                 const adjacentVertex = this.adjacencyList[vertex].pop();
                 this.removeEdge(vertex, adjacentVertex);
             }
             delete this.adjacencyList[vertex];
+            this.vertexCount--;
             return true;
         }
         return false;
     }
+
     bfs(startVertex) {
+        startVertex = String(startVertex);
         if (!this.adjacencyList[startVertex]) return [];
+
         const queue = [startVertex];
         const result = [];
         const visited = {};
         visited[startVertex] = true;
-        while(queue.length) {
+
+        while (queue.length) {
             const current = queue.shift();
             result.push(current);
+
             this.adjacencyList[current].forEach(neighbor => {
-                if(!visited[neighbor]) { visited[neighbor] = true; queue.push(neighbor); }
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.push(neighbor);
+                }
             });
         }
         return result;
     }
+
     dfs(startVertex) {
+        startVertex = String(startVertex);
         if (!this.adjacencyList[startVertex]) return [];
+
         const result = [];
         const visited = {};
         const adjacencyList = this.adjacencyList;
-        (function dfsIter(vertex){
-            if(!vertex) return;
+
+        (function dfsIter(vertex) {
+            if (!vertex || visited[vertex]) return;
             visited[vertex] = true;
             result.push(vertex);
             adjacencyList[vertex].forEach(neighbor => {
-                if(!visited[neighbor]) dfsIter(neighbor);
+                if (!visited[neighbor]) dfsIter(neighbor);
             });
         })(startVertex);
+
         return result;
     }
-    clear() { this.adjacencyList = {}; }
+
+    getVertexCount() {
+        return this.vertexCount;
+    }
+
+    getEdgeCount() {
+        return this.edgeCount;
+    }
+
+    clear() {
+        this.adjacencyList = {};
+        this.vertexCount = 0;
+        this.edgeCount = 0;
+    }
 }
 
 function animatePath(pathArray, domSelector, statusBox, logPrefix) {
@@ -172,7 +318,7 @@ function animatePath(pathArray, domSelector, statusBox, logPrefix) {
     if (!pathArray || pathArray.length === 0) return;
     let i = 0;
     statusBox.style.display = 'block';
-    
+
     function step() {
         if (i < pathArray.length) {
             const val = pathArray[i];
@@ -181,7 +327,7 @@ function animatePath(pathArray, domSelector, statusBox, logPrefix) {
                 const nodeVal = n.dataset.val || n.innerText;
                 if (String(nodeVal) === String(val)) n.classList.add('visited');
             });
-            statusBox.innerText = `${logPrefix}: [${pathArray.slice(0, i+1).join(', ')}]`;
+            statusBox.innerText = `${logPrefix}: [${pathArray.slice(0, i + 1).join(', ')}]`;
             i++;
             setTimeout(step, 500);
         }
@@ -479,6 +625,22 @@ document.getElementById('findTreeBtn').addEventListener('click', () => {
         }
     } else treeStatus.innerText = "Error: Enter a valid number.";
 });
+document.getElementById('removeTreeBtn').addEventListener('click', () => {
+    const val = parseFloat(treeInput.value);
+    if (!isNaN(val)) {
+        if (myTree.remove(val)) {
+            renderTree();
+            treeStatus.innerText = `Removed Node [ ${val} ] from BST.`;
+        } else {
+            treeStatus.innerText = `Node [ ${val} ] not found.`;
+        }
+        treeInput.value = '';
+        treeInput.focus();
+        inorderResultBox.style.display = 'none';
+    } else {
+        treeStatus.innerText = "Error: Enter a valid number to remove.";
+    }
+});
 document.getElementById('inorderBtn').addEventListener('click', () => {
     treeStatus.innerText = `Inorder Traversal Running...`;
     animatePath(myTree.inorder(), '.tree-node', inorderResultBox, 'Inorder');
@@ -496,6 +658,7 @@ document.getElementById('treeClearBtn').addEventListener('click', () => {
 });
 treeInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('insertTreeBtn').click());
 window.addEventListener('resize', renderTree);
+
 //graph interface
 const myGraph = new Graph();
 const vInput = document.getElementById('vertexInput');
@@ -510,6 +673,7 @@ function updateGraphEdges() {
     if (!svg) return;
     svg.innerHTML = '';
     const edgesDrawn = new Set();
+
     Object.keys(myGraph.adjacencyList).forEach(v1 => {
         myGraph.adjacencyList[v1].forEach(v2 => {
             const edgeId = [String(v1), String(v2)].sort().join('-');
@@ -517,10 +681,10 @@ function updateGraphEdges() {
                 const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 line.dataset.v1 = v1;
                 line.dataset.v2 = v2;
-                line.setAttribute('x1', vertexCoords[v1].x);
-                line.setAttribute('y1', vertexCoords[v1].y);
-                line.setAttribute('x2', vertexCoords[v2].x);
-                line.setAttribute('y2', vertexCoords[v2].y);
+                line.setAttribute('x1', vertexCoords[v1].x + 22.5);
+                line.setAttribute('y1', vertexCoords[v1].y + 22.5);
+                line.setAttribute('x2', vertexCoords[v2].x + 22.5);
+                line.setAttribute('y2', vertexCoords[v2].y + 22.5);
                 line.setAttribute('class', 'graph-edge');
                 svg.appendChild(line);
                 edgesDrawn.add(edgeId);
@@ -536,64 +700,74 @@ function renderGraph() {
         const dNode = document.createElement('div');
         dNode.className = 'graph-node';
         dNode.innerText = v;
-        dNode.dataset.v = v; 
+        dNode.dataset.v = v;
         dNode.style.left = `${vertexCoords[v].x}px`;
         dNode.style.top = `${vertexCoords[v].y}px`;
+        dNode.style.cursor = 'grab';
         graphDisplay.appendChild(dNode);
     });
 }
 document.getElementById('addVertexBtn').addEventListener('click', () => {
-    if (Object.keys(myGraph.adjacencyList).length >= 10) { graphStatus.innerText = "Error: Max 10 vertices allowed."; return; }
-    const v = parseFloat(vInput.value);
-    if (!isNaN(v)) {
+    if (myGraph.getVertexCount() >= 10) {
+        graphStatus.innerText = "Error: Max 10 vertices allowed.";
+        return;
+    }
+    const v = String(parseFloat(vInput.value) || vInput.value).trim();
+    if (v && v !== 'NaN') {
         if (myGraph.addVertex(v)) {
             const w = graphDisplay.clientWidth;
             const h = graphDisplay.clientHeight;
-            vertexCoords[v] = { x: Math.random() * (w - 100) + 50, y: Math.random() * (h - 100) + 50 };
+            vertexCoords[v] = {
+                x: Math.random() * (w - 100) + 50,
+                y: Math.random() * (h - 100) + 50
+            };
             renderGraph();
             graphStatus.innerText = `Added Vertex [ ${v} ]`;
-            vInput.value = ''; vInput.focus();
+            vInput.value = '';
+            vInput.focus();
         } else {
             graphStatus.innerText = `Vertex [ ${v} ] already exists.`;
         }
-    } else graphStatus.innerText = "Error: Numeric vertex name required.";
+    } else graphStatus.innerText = "Error: Enter a valid vertex name.";
 });
 document.getElementById('addEdgeBtn').addEventListener('click', () => {
-    const v1 = parseFloat(edgeV1.value);
-    const v2 = parseFloat(edgeV2.value);
-    if (!isNaN(v1) && !isNaN(v2)) {
+    const v1 = String(parseFloat(edgeV1.value) || edgeV1.value).trim();
+    const v2 = String(parseFloat(edgeV2.value) || edgeV2.value).trim();
+
+    if (v1 && v2 && v1 !== 'NaN' && v2 !== 'NaN' && v1 !== v2) {
         if (myGraph.addEdge(v1, v2)) {
             renderGraph();
             graphStatus.innerText = `Added Edge [ ${v1} - ${v2} ]`;
-            edgeV1.value = ''; edgeV2.value = '';
+            edgeV1.value = '';
+            edgeV2.value = '';
         } else {
-            graphStatus.innerText = `Ensure both vertices exist!`;
+            graphStatus.innerText = `Edge already exists or vertices do not exist!`;
         }
-    } else graphStatus.innerText = "Error: Valid edge numbers required.";
+    } else graphStatus.innerText = "Error: Enter two different valid vertices.";
 });
 
 document.getElementById('removeEdgeBtn').addEventListener('click', () => {
-    const v1 = parseFloat(edgeV1.value);
-    const v2 = parseFloat(edgeV2.value);
-    if (!isNaN(v1) && !isNaN(v2)) {
+    const v1 = String(parseFloat(edgeV1.value) || edgeV1.value).trim();
+    const v2 = String(parseFloat(edgeV2.value) || edgeV2.value).trim();
+
+    if (v1 && v2 && v1 !== 'NaN' && v2 !== 'NaN') {
         if (myGraph.removeEdge(v1, v2)) {
             renderGraph();
             graphStatus.innerText = `Removed Edge [ ${v1} - ${v2} ]`;
         } else {
             graphStatus.innerText = `Edge doesn't exist.`;
         }
-    } else graphStatus.innerText = "Error: Valid edge numbers required.";
+    } else graphStatus.innerText = "Error: Enter valid vertices.";
 });
-
-
 
 document.getElementById('bfsBtn').addEventListener('click', () => {
     const keys = Object.keys(myGraph.adjacencyList);
-    if (!keys.length) { graphStatus.innerText = "Error: Graph is empty."; return; }
-    
-    const inputVal = parseFloat(vInput.value);
-    let startObj = !isNaN(inputVal) && myGraph.adjacencyList[inputVal] ? inputVal : keys[0];
-    
+    if (!keys.length) {
+        graphStatus.innerText = "Error: Graph is empty.";
+        return;
+    }
+    const inputVal = String(parseFloat(vInput.value) || vInput.value).trim();
+    let startObj = (inputVal && inputVal !== 'NaN' && myGraph.adjacencyList[inputVal]) ? inputVal : keys[0];
     graphStatus.innerText = `BFS Route from [ ${startObj} ]`;
     const graphResultBox = document.getElementById('graphResultBox');
     animatePath(myGraph.bfs(startObj), '.graph-node', graphResultBox, 'BFS Path');
@@ -601,10 +775,12 @@ document.getElementById('bfsBtn').addEventListener('click', () => {
 
 document.getElementById('dfsBtn').addEventListener('click', () => {
     const keys = Object.keys(myGraph.adjacencyList);
-    if (!keys.length) { graphStatus.innerText = "Error: Graph is empty."; return; }
-    
-    const inputVal = parseFloat(vInput.value);
-    let startObj = !isNaN(inputVal) && myGraph.adjacencyList[inputVal] ? inputVal : keys[0]; 
+    if (!keys.length) {
+        graphStatus.innerText = "Error: Graph is empty.";
+        return;
+    }
+    const inputVal = String(parseFloat(vInput.value) || vInput.value).trim();
+    let startObj = (inputVal && inputVal !== 'NaN' && myGraph.adjacencyList[inputVal]) ? inputVal : keys[0];
     graphStatus.innerText = `DFS Route from [ ${startObj} ]`;
     const graphResultBox = document.getElementById('graphResultBox');
     animatePath(myGraph.dfs(startObj), '.graph-node', graphResultBox, 'DFS Path');
@@ -615,4 +791,356 @@ document.getElementById('graphClearBtn').addEventListener('click', () => {
     renderGraph();
     graphStatus.innerText = "Graph Cleared.";
 });
+
 vInput.addEventListener('keypress', e => e.key === 'Enter' && document.getElementById('addVertexBtn').click());
+
+let draggedVertex = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+graphDisplay.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('graph-node')) {
+        draggedVertex = e.target.dataset.v;
+        const rect = e.target.getBoundingClientRect();
+        const containerRect = graphDisplay.getBoundingClientRect();
+        dragOffsetX = e.clientX - rect.left;
+        dragOffsetY = e.clientY - rect.top;
+        e.target.style.cursor = 'grabbing';
+    }
+});
+
+graphDisplay.addEventListener('mousemove', (e) => {
+    if (!draggedVertex) return;
+    const containerRect = graphDisplay.getBoundingClientRect();
+    const newX = e.clientX - containerRect.left - dragOffsetX;
+    const newY = e.clientY - containerRect.top - dragOffsetY;
+    vertexCoords[draggedVertex].x = Math.max(0, Math.min(newX, containerRect.width - 45));
+    vertexCoords[draggedVertex].y = Math.max(0, Math.min(newY, containerRect.height - 45));
+    renderGraph();
+});
+
+graphDisplay.addEventListener('mouseup', () => {
+    if (draggedVertex) {
+        const vertex = document.querySelector(`[data-v="${draggedVertex}"]`);
+        if (vertex) vertex.style.cursor = 'grab';
+        draggedVertex = null;
+    }
+});
+
+graphDisplay.addEventListener('mouseleave', () => {
+    draggedVertex = null;
+});
+
+// Helper for animations
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// --- SORTING IMPLEMENTATION ---
+let sortArray = [];
+const sortInput = document.getElementById('sortInput');
+const sortingDisplay = document.getElementById('sortingDisplay');
+const sortStatus = document.getElementById('sortStatus');
+const sortSize = document.getElementById('sortSize');
+const sortTimeComp = document.getElementById('sortTimeComp');
+const sortSpaceComp = document.getElementById('sortSpaceComp');
+
+function updateSortDisplay() {
+    sortingDisplay.innerHTML = '';
+    sortArray.forEach((val, idx) => {
+        const bar = document.createElement('div');
+        bar.className = 'sort-bar';
+        bar.innerText = val;
+        bar.id = `bar-${idx}`;
+        sortingDisplay.appendChild(bar);
+    });
+    sortSize.innerText = sortArray.length;
+}
+
+function setSortComplexity(algo) {
+    const complexities = {
+        bubble: { time: "O(n²)", space: "O(1)" },
+        selection: { time: "O(n²)", space: "O(1)" },
+        insertion: { time: "O(n²)", space: "O(1)" },
+        merge: { time: "O(n log n)", space: "O(n)" },
+        quick: { time: "O(n log n)", space: "O(log n)" }
+    };
+    sortTimeComp.innerHTML = `Time: <strong>${complexities[algo].time}</strong>`;
+    sortSpaceComp.innerHTML = `Space: <strong>${complexities[algo].space}</strong>`;
+}
+
+document.getElementById('addSortBtn').addEventListener('click', () => {
+    if (sortArray.length >= 10) { sortStatus.innerText = "Error: Max 10 items allowed."; return; }
+    const val = parseFloat(sortInput.value);
+    if (!isNaN(val)) {
+        sortArray.push(val);
+        updateSortDisplay();
+        sortStatus.innerText = `Added [ ${val} ]`;
+        sortInput.value = ''; sortInput.focus();
+    }
+});
+
+document.getElementById('randomSortBtn').addEventListener('click', () => {
+    sortArray = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100) + 1);
+    updateSortDisplay();
+    sortStatus.innerText = "Random array generated.";
+});
+
+document.getElementById('sortClearBtn').addEventListener('click', () => {
+    sortArray = [];
+    updateSortDisplay();
+    sortStatus.innerText = "Array cleared.";
+});
+
+async function bubbleSort() {
+    setSortComplexity('bubble');
+    const bars = sortingDisplay.children;
+    for (let i = 0; i < sortArray.length; i++) {
+        for (let j = 0; j < sortArray.length - i - 1; j++) {
+            bars[j].classList.add('comparing');
+            bars[j + 1].classList.add('comparing');
+            sortStatus.innerText = `Comparing ${sortArray[j]} and ${sortArray[j + 1]}`;
+            await sleep(400);
+
+            if (sortArray[j] > sortArray[j + 1]) {
+                bars[j].classList.add('swapping');
+                bars[j + 1].classList.add('swapping');
+                sortStatus.innerText = `Swapping ${sortArray[j]} and ${sortArray[j + 1]}`;
+                [sortArray[j], sortArray[j + 1]] = [sortArray[j + 1], sortArray[j]];
+                updateSortDisplay();
+                await sleep(400);
+            }
+            document.querySelectorAll('.sort-bar').forEach(b => b.classList.remove('comparing', 'swapping'));
+        }
+        document.getElementById(`bar-${sortArray.length - i - 1}`).classList.add('sorted');
+    }
+    sortStatus.innerText = "Bubble Sort Complete!";
+}
+
+async function selectionSort() {
+    setSortComplexity('selection');
+    const bars = sortingDisplay.children;
+    for (let i = 0; i < sortArray.length; i++) {
+        let minIdx = i;
+        bars[i].classList.add('comparing');
+        for (let j = i + 1; j < sortArray.length; j++) {
+            bars[j].classList.add('comparing');
+            await sleep(300);
+            if (sortArray[j] < sortArray[minIdx]) {
+                if (minIdx !== i) bars[minIdx].classList.remove('swapping');
+                minIdx = j;
+                bars[minIdx].classList.add('swapping');
+            } else {
+                bars[j].classList.remove('comparing');
+            }
+        }
+        if (minIdx !== i) {
+            [sortArray[i], sortArray[minIdx]] = [sortArray[minIdx], sortArray[i]];
+            updateSortDisplay();
+            await sleep(400);
+        }
+        document.querySelectorAll('.sort-bar').forEach(b => b.classList.remove('comparing', 'swapping'));
+        for (let k = 0; k <= i; k++) document.getElementById(`bar-${k}`).classList.add('sorted');
+    }
+    sortStatus.innerText = "Selection Sort Complete!";
+}
+
+async function insertionSort() {
+    setSortComplexity('insertion');
+    for (let i = 1; i < sortArray.length; i++) {
+        let key = sortArray[i];
+        let j = i - 1;
+        document.getElementById(`bar-${i}`).classList.add('swapping');
+        while (j >= 0 && sortArray[j] > key) {
+            document.getElementById(`bar-${j}`).classList.add('comparing');
+            await sleep(400);
+            sortArray[j + 1] = sortArray[j];
+            j--;
+            updateSortDisplay();
+            document.querySelectorAll('.sort-bar').forEach((b, idx) => {
+                if (idx <= i) b.classList.add('sorted');
+            });
+        }
+        sortArray[j + 1] = key;
+        updateSortDisplay();
+        await sleep(400);
+        document.querySelectorAll('.sort-bar').forEach((b, idx) => {
+            if (idx <= i) b.classList.add('sorted');
+        });
+    }
+    sortStatus.innerText = "Insertion Sort Complete!";
+}
+
+async function mergeSort(arr = sortArray, start = 0) {
+    setSortComplexity('merge');
+    if (arr.length <= 1) return arr;
+    const mid = Math.floor(arr.length / 2);
+    const left = await mergeSort(arr.slice(0, mid), start);
+    const right = await mergeSort(arr.slice(mid), start + mid);
+    return await merge(left, right, start);
+}
+
+async function merge(left, right, start) {
+    let result = [], i = 0, j = 0;
+    while (i < left.length && j < right.length) {
+        if (left[i] < right[j]) result.push(left[i++]);
+        else result.push(right[j++]);
+    }
+    result = result.concat(left.slice(i)).concat(right.slice(j));
+
+    for (let k = 0; k < result.length; k++) {
+        sortArray[start + k] = result[k];
+        updateSortDisplay();
+        document.getElementById(`bar-${start + k}`).classList.add('swapping');
+        await sleep(200);
+    }
+    document.querySelectorAll('.sort-bar').forEach(b => b.classList.remove('swapping'));
+    return result;
+}
+
+async function quickSort(start = 0, end = sortArray.length - 1) {
+    setSortComplexity('quick');
+    if (start >= end) return;
+    let index = await partition(start, end);
+    await Promise.all([
+        quickSort(start, index - 1),
+        quickSort(index + 1, end)
+    ]);
+    if (start === 0 && end === sortArray.length - 1) {
+        updateSortDisplay();
+        document.querySelectorAll('.sort-bar').forEach(b => b.classList.add('sorted'));
+        sortStatus.innerText = "Quick Sort Complete!";
+    }
+}
+
+async function partition(start, end) {
+    let pivotValue = sortArray[end];
+    let pivotIndex = start;
+    document.getElementById(`bar-${end}`).classList.add('comparing');
+    for (let i = start; i < end; i++) {
+        document.getElementById(`bar-${i}`).classList.add('comparing');
+        if (sortArray[i] < pivotValue) {
+            [sortArray[i], sortArray[pivotIndex]] = [sortArray[pivotIndex], sortArray[i]];
+            pivotIndex++;
+            updateSortDisplay();
+            await sleep(200);
+        }
+        document.getElementById(`bar-${i}`).classList.remove('comparing');
+    }
+    [sortArray[pivotIndex], sortArray[end]] = [sortArray[end], sortArray[pivotIndex]];
+    updateSortDisplay();
+    await sleep(200);
+    return pivotIndex;
+}
+
+document.getElementById('bubbleSortBtn').addEventListener('click', bubbleSort);
+document.getElementById('selectionSortBtn').addEventListener('click', selectionSort);
+document.getElementById('insertionSortBtn').addEventListener('click', insertionSort);
+document.getElementById('mergeSortBtn').addEventListener('click', () => mergeSort().then(() => {
+    sortStatus.innerText = "Merge Sort Complete!";
+    document.querySelectorAll('.sort-bar').forEach(b => b.classList.add('sorted'));
+}));
+document.getElementById('quickSortBtn').addEventListener('click', () => quickSort());
+
+
+// --- SEARCHING IMPLEMENTATION ---
+let searchArray = [];
+const searchInput = document.getElementById('searchInput');
+const searchTarget = document.getElementById('searchTarget');
+const searchingDisplay = document.getElementById('searchingDisplay');
+const searchStatus = document.getElementById('searchStatus');
+const searchSize = document.getElementById('searchSize');
+
+function updateSearchDisplay() {
+    searchingDisplay.innerHTML = '';
+    searchArray.forEach((val, idx) => {
+        const box = document.createElement('div');
+        box.className = 'search-box';
+        box.innerText = val;
+        box.id = `box-${idx}`;
+        searchingDisplay.appendChild(box);
+    });
+    searchSize.innerText = searchArray.length;
+}
+
+document.getElementById('addSearchBtn').addEventListener('click', () => {
+    if (searchArray.length >= 10) { searchStatus.innerText = "Error: Max 10 items."; return; }
+    const val = parseFloat(searchInput.value);
+    if (!isNaN(val)) {
+        searchArray.push(val);
+        updateSearchDisplay();
+        searchStatus.innerText = `Added [ ${val} ]`;
+        searchInput.value = ''; searchInput.focus();
+    }
+});
+
+document.getElementById('randomSearchBtn').addEventListener('click', () => {
+    searchArray = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100) + 1);
+    updateSearchDisplay();
+});
+
+document.getElementById('searchClearBtn').addEventListener('click', () => {
+    searchArray = [];
+    updateSearchDisplay();
+    searchStatus.innerText = "Array cleared.";
+});
+
+async function linearSearch() {
+    const target = parseFloat(searchTarget.value);
+    if (isNaN(target)) { searchStatus.innerText = "Error: Enter target value."; return; }
+
+    const boxes = searchingDisplay.children;
+    for (let i = 0; i < searchArray.length; i++) {
+        boxes[i].classList.add('checking');
+        searchStatus.innerText = `Checking index ${i}: ${searchArray[i]} == ${target}?`;
+        await sleep(500);
+        if (searchArray[i] === target) {
+            boxes[i].classList.remove('checking');
+            boxes[i].classList.add('found');
+            searchStatus.innerText = `Found ${target} at index ${i}!`;
+            return;
+        }
+        boxes[i].classList.remove('checking');
+        boxes[i].classList.add('discarded');
+    }
+    searchStatus.innerText = `${target} not found in array.`;
+}
+
+async function binarySearch() {
+    const target = parseFloat(searchTarget.value);
+    if (isNaN(target)) { searchStatus.innerText = "Error: Enter target value."; return; }
+
+    searchStatus.innerText = "Sorting array for Binary Search...";
+    searchArray.sort((a, b) => a - b);
+    updateSearchDisplay();
+    await sleep(1000);
+
+    const boxes = searchingDisplay.children;
+    let left = 0, right = searchArray.length - 1;
+
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        boxes[mid].classList.add('checking');
+        searchStatus.innerText = `Checking middle index ${mid}: ${searchArray[mid]}`;
+        await sleep(800);
+
+        if (searchArray[mid] === target) {
+            boxes[mid].classList.remove('checking');
+            boxes[mid].classList.add('found');
+            searchStatus.innerText = `Found ${target} at index ${mid}!`;
+            return;
+        }
+
+        if (searchArray[mid] < target) {
+            for (let k = left; k <= mid; k++) boxes[k].classList.add('discarded');
+            left = mid + 1;
+        } else {
+            for (let k = mid; k <= right; k++) boxes[k].classList.add('discarded');
+            right = mid - 1;
+        }
+        boxes[mid].classList.remove('checking');
+        await sleep(400);
+    }
+    searchStatus.innerText = `${target} not found.`;
+}
+
+document.getElementById('linearSearchBtn').addEventListener('click', linearSearch);
+document.getElementById('binarySearchBtn').addEventListener('click', binarySearch);
