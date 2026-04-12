@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced ADT Visualizer</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="app-container">
         <header class="glass-panel">
@@ -13,9 +15,9 @@
             <div class="group-info">
                 <ul class="team-list">
                     <li>Ahabwe Charles Kitegye<span class="reg-badge">2500703090</span></li>
-                    <li>name<span class="reg-badge">st.no</span></li>
-                    <li>Name <span class="reg-badge">st.no</span></li>
-                    <li>name<span class="reg-badge">st.no</span></li>
+                    <li>Semwogerere Kelvin Ssenoga<span class="reg-badge">2500701234</span></li>
+                    <li>Ssemakadde Brian Kayiranga<span class="reg-badge">2500701567</span></li>
+                    <li>Okurut Joseph Bosco<span class="reg-badge">2500701890</span></li>
                 </ul>
             </div>
             <!--buttons-->
@@ -25,10 +27,12 @@
                 <button class="nav-btn" data-target="view-list">Linked List</button>
                 <button class="nav-btn" data-target="view-tree">Binary Tree</button>
                 <button class="nav-btn" data-target="view-graph">Graph</button>
+                <button class="nav-btn" data-target="view-sorting">Sorting</button>
+                <button class="nav-btn" data-target="view-searching">Searching</button>
             </nav>
         </header>
 
-        <!--stac -->
+        <!--stack-->
         <main class="main-content active" id="view-stack">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -61,12 +65,12 @@
                 <h2>Live Stack Visualization</h2>
                 <div class="stack-environment">
                     <div class="stack-container" id="stackDisplay"></div>
-                    <div class="stack-base"></div> 
+                    <div class="stack-base"></div>
                 </div>
             </div>
         </main>
 
-        <!--que-->
+        <!--queue-->
         <main class="main-content" id="view-queue" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -106,7 +110,7 @@
             </div>
         </main>
 
-        <!--llist -->
+        <!--linked list-->
         <main class="main-content" id="view-list" style="display:none;">
             <div class="control-panel glass-panel">
                 <div class="input-section">
@@ -147,17 +151,21 @@
                 <div class="input-section">
                     <input type="number" id="treeInput" placeholder="Enter numeric value..." autocomplete="off">
                 </div>
-                <div class="button-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="button-grid" style="grid-template-columns: repeat(2, 1fr);">
                     <button id="insertTreeBtn" class="btn push-btn">Insert</button>
+                    <button id="removeTreeBtn" class="btn pop-btn">Remove</button>
                     <button id="findTreeBtn" class="btn peek-btn">Find</button>
-                    <button id="treeClearBtn" class="btn clear-btn" style="grid-column: span 1;">Clear</button>
+                    <button id="treeClearBtn" class="btn clear-btn">Clear</button>
+                </div>
+                <div class="button-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 10px;">
                     <button id="inorderBtn" class="btn is-empty-btn">Inorder</button>
                     <button id="preorderBtn" class="btn is-empty-btn">Preorder</button>
                     <button id="postorderBtn" class="btn is-empty-btn">Postorder</button>
                 </div>
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="treeStatus" class="glow-text">System Ready.</span></p>
-                    <p id="inorderResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p id="inorderResultBox"
+                        style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -192,17 +200,18 @@
                 <div class="button-grid">
                     <button id="addEdgeBtn" class="btn peek-btn">Add Edge</button>
                     <button id="removeEdgeBtn" class="btn pop-btn">Remove Edge</button>
-                </div>                
+                </div>
                 <div class="button-grid">
                     <button id="bfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">BFS Route</button>
                     <button id="dfsBtn" class="btn is-empty-btn" style="grid-column: span 1;">DFS Route</button>
-                </div>                
+                </div>
                 <div class="button-grid" style="margin-top:15px; grid-template-columns: 1fr;">
                     <button id="graphClearBtn" class="btn clear-btn">Clear Graph</button>
-                </div>                
+                </div>
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="graphStatus" class="glow-text">System Ready.</span></p>
-                    <p id="graphResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p id="graphResultBox"
+                        style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -219,12 +228,91 @@
             <div class="visualizer-panel glass-panel container-relative">
                 <h2>Live Graph Visualization</h2>
                 <div class="graph-environment" id="graphDisplay">
-                    <svg id="graphSvgEdges"></svg> <!--lines for th graph-->
+                    <svg id="graphSvgEdges"></svg> <!--lines for the graph-->
                 </div>
+            </div>
+        </main>
+
+        <!-- Sorting -->
+        <main class="main-content" id="view-sorting" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="sortInput" placeholder="Enter number..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="addSortBtn" class="btn push-btn">Add</button>
+                    <button id="randomSortBtn" class="btn peek-btn">Randomize</button>
+                    <button id="bubbleSortBtn" class="btn is-empty-btn">Bubble</button>
+                    <button id="selectionSortBtn" class="btn is-empty-btn">Selection</button>
+                    <button id="insertionSortBtn" class="btn is-empty-btn">Insertion</button>
+                    <button id="mergeSortBtn" class="btn is-empty-btn">Merge</button>
+                    <button id="quickSortBtn" class="btn is-empty-btn">Quick</button>
+                    <button id="sortClearBtn" class="btn clear-btn">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="sortStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Array Size:</strong> <span id="sortSize" class="glow-text">0</span> (Max 10)</p>
+                </div>
+                <div class="complexity-box" id="sortComplexity">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time</span>
+                        <p id="sortTimeComp">Select an algorithm to see complexity.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p id="sortSpaceComp">Select an algorithm to see complexity.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Sorting Visualization</h2>
+                <div class="sorting-environment" id="sortingDisplay"></div>
+            </div>
+        </main>
+
+        <!-- Searching -->
+        <main class="main-content" id="view-searching" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="searchInput" placeholder="Enter number..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="addSearchBtn" class="btn push-btn">Add</button>
+                    <button id="randomSearchBtn" class="btn peek-btn">Randomize</button>
+                </div>
+                <div class="input-section" style="margin-top: 15px;">
+                    <input type="number" id="searchTarget" placeholder="Target to find..." autocomplete="off">
+                </div>
+                <div class="button-grid">
+                    <button id="linearSearchBtn" class="btn is-empty-btn">Linear Search</button>
+                    <button id="binarySearchBtn" class="btn is-empty-btn">Binary Search</button>
+                    <button id="searchClearBtn" class="btn clear-btn">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="searchStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Array Size:</strong> <span id="searchSize" class="glow-text">0</span> (Max 10)</p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Linear Search</span>
+                        <p>Time: <strong>O(n)</strong> | Space: <strong>O(1)</strong></p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Binary Search</span>
+                        <p>Time: <strong>O(log n)</strong> | Space: <strong>O(1)</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Searching Visualization</h2>
+                <div class="searching-environment" id="searchingDisplay"></div>
             </div>
         </main>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
