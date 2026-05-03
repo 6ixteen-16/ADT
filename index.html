@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced ADT Visualizer</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="app-container">
         <header class="glass-panel">
@@ -29,9 +27,11 @@
                 <button class="nav-btn" data-target="view-graph">Graph</button>
                 <button class="nav-btn" data-target="view-sorting">Sorting</button>
                 <button class="nav-btn" data-target="view-searching">Searching</button>
+                <button class="nav-btn" data-target="view-heap">Heap</button>
+                <button class="nav-btn" data-target="view-hashtable">Hash Table</button>
+                <button class="nav-btn" data-target="view-hanoi">Tower of Hanoi</button>
             </nav>
         </header>
-
         <!--stack-->
         <main class="main-content active" id="view-stack">
             <div class="control-panel glass-panel">
@@ -48,6 +48,7 @@
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="stackStatus" class="glow-text">System Ready.</span></p>
                     <p><strong>Current Size:</strong> <span id="stackSize" class="glow-text">0</span> (Max 10)</p>
+                    <p><strong>Time:</strong> <span id="stackTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -69,7 +70,6 @@
                 </div>
             </div>
         </main>
-
         <!--queue-->
         <main class="main-content" id="view-queue" style="display:none;">
             <div class="control-panel glass-panel">
@@ -87,6 +87,7 @@
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="queueStatus" class="glow-text">System Ready.</span></p>
                     <p><strong>Current Size:</strong> <span id="queueSize" class="glow-text">0</span> (Max 10)</p>
+                    <p><strong>Time:</strong> <span id="queueTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -109,7 +110,6 @@
                 </div>
             </div>
         </main>
-
         <!--linked list-->
         <main class="main-content" id="view-list" style="display:none;">
             <div class="control-panel glass-panel">
@@ -125,6 +125,7 @@
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="listStatus" class="glow-text">System Ready.</span></p>
                     <p><strong>Current Size:</strong> <span id="listSize" class="glow-text">0</span> (Max 10)</p>
+                    <p><strong>Time:</strong> <span id="listTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -164,8 +165,8 @@
                 </div>
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="treeStatus" class="glow-text">System Ready.</span></p>
-                    <p id="inorderResultBox"
-                        style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p id="inorderResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p><strong>Time:</strong> <span id="treeTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -210,8 +211,8 @@
                 </div>
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="graphStatus" class="glow-text">System Ready.</span></p>
-                    <p id="graphResultBox"
-                        style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p id="graphResultBox" style="display:none; font-size: 0.9em; margin-top:5px; color: var(--neon-purple);"></p>
+                    <p><strong>Time:</strong> <span id="graphTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -232,7 +233,6 @@
                 </div>
             </div>
         </main>
-
         <!-- Sorting -->
         <main class="main-content" id="view-sorting" style="display:none;">
             <div class="control-panel glass-panel">
@@ -252,6 +252,7 @@
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="sortStatus" class="glow-text">System Ready.</span></p>
                     <p><strong>Array Size:</strong> <span id="sortSize" class="glow-text">0</span> (Max 10)</p>
+                    <p><strong>Time:</strong> <span id="sortTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box" id="sortComplexity">
                     <h3>Complexity Analysis</h3>
@@ -270,7 +271,6 @@
                 <div class="sorting-environment" id="sortingDisplay"></div>
             </div>
         </main>
-
         <!-- Searching -->
         <main class="main-content" id="view-searching" style="display:none;">
             <div class="control-panel glass-panel">
@@ -292,6 +292,7 @@
                 <div class="status-box">
                     <p><strong>Live Status:</strong> <span id="searchStatus" class="glow-text">System Ready.</span></p>
                     <p><strong>Array Size:</strong> <span id="searchSize" class="glow-text">0</span> (Max 10)</p>
+                    <p><strong>Time:</strong> <span id="searchTime" class="glow-text">-</span></p>
                 </div>
                 <div class="complexity-box">
                     <h3>Complexity Analysis</h3>
@@ -310,9 +311,132 @@
                 <div class="searching-environment" id="searchingDisplay"></div>
             </div>
         </main>
+        <!-- Heap -->
+        <main class="main-content" id="view-heap" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="heapInput" placeholder="Enter numeric value..." autocomplete="off">
+                </div>
+                <div class="button-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <button id="heapInsertBtn" class="btn push-btn">Insert</button>
+                    <button id="heapExtractBtn" class="btn pop-btn">Extract Max</button>
+                    <button id="heapPeekBtn" class="btn peek-btn">Peek Max</button>
+                    <button id="heapSizeBtn" class="btn is-empty-btn">Size</button>
+                    <button id="heapIsEmptyBtn" class="btn is-empty-btn">Is Empty?</button>
+                    <button id="heapClearBtn" class="btn clear-btn">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="heapStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Current Size:</strong> <span id="heapSize" class="glow-text">0</span> (Max 15)</p>
+                    <p><strong>Time:</strong> <span id="heapTime" class="glow-text">-</span></p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Insert/Extract: <strong>O(log n)</strong> | Peek: <strong>O(1)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel container-relative">
+                <h2>Live Max-Heap Visualization</h2>
+                <div class="tree-environment" id="heapDisplay"></div>
+            </div>
+        </main>
+        <!-- Hash Table -->
+        <main class="main-content" id="view-hashtable" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section" style="display:flex; gap:5px;">
+                    <input type="text" id="hashKey" placeholder="Key..." autocomplete="off" style="width:50%;">
+                    <input type="text" id="hashValue" placeholder="Value..." autocomplete="off" style="width:50%;">
+                </div>
+                <div class="button-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <button id="hashSetBtn" class="btn push-btn">Set</button>
+                    <button id="hashGetBtn" class="btn peek-btn">Get</button>
+                    <button id="hashDeleteBtn" class="btn pop-btn">Delete</button>
+                    <button id="hashHasBtn" class="btn is-empty-btn">Has Key?</button>
+                    <button id="hashKeysBtn" class="btn is-empty-btn">List Keys</button>
+                    <button id="hashClearBtn" class="btn clear-btn">Clear</button>
+                </div>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="hashStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Entries:</strong> <span id="hashCount" class="glow-text">0</span> | <strong>Buckets:</strong> <span id="hashBuckets" class="glow-text">11</span></p>
+                    <p><strong>Time:</strong> <span id="hashTime" class="glow-text">-</span></p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Set/Get/Delete: Average <strong>O(1)</strong>, Worst <strong>O(n)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space</span>
+                        <p>Overall Space: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Hash Table Visualization</h2>
+                <div class="hashtable-environment" id="hashDisplay"></div>
+            </div>
+        </main>
+        <!-- Tower of Hanoi -->
+        <main class="main-content" id="view-hanoi" style="display:none;">
+            <div class="control-panel glass-panel">
+                <div class="input-section">
+                    <input type="number" id="hanoiDisks" placeholder="Number of disks (1-7)..." min="1" max="7" autocomplete="off">
+                </div>
+                <div class="button-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <button id="hanoiStartBtn" class="btn push-btn">Start</button>
+                    <button id="hanoiResetBtn" class="btn pop-btn">Reset</button>
+                </div>
+                <div class="input-section" style="margin-top:15px;">
+                    <input type="range" id="hanoiSpeed" min="100" max="1500" value="600" style="width:100%; accent-color: var(--neon-blue);">
+                </div>
+                <p style="text-align:center; color: var(--text-muted); font-size:0.85em; margin-top:5px;">Speed: <span id="hanoiSpeedLabel">600ms</span></p>
+                <div class="status-box">
+                    <p><strong>Live Status:</strong> <span id="hanoiStatus" class="glow-text">System Ready.</span></p>
+                    <p><strong>Move:</strong> <span id="hanoiMoveCount" class="glow-text">0</span> / <span id="hanoiTotalMoves" class="glow-text">0</span></p>
+                    <p><strong>Time:</strong> <span id="hanoiTime" class="glow-text">-</span></p>
+                </div>
+                <div class="complexity-box">
+                    <h3>Complexity Analysis</h3>
+                    <div class="comp-item">
+                        <span class="comp-label time-label">Time (Implementation)</span>
+                        <p>Moves: <strong>O(2<sup>n</sup> - 1)</strong>.</p>
+                    </div>
+                    <div class="comp-item">
+                        <span class="comp-label space-label">Space (Call Stack)</span>
+                        <p>Recursion Depth: <strong>O(n)</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer-panel glass-panel">
+                <h2>Live Tower of Hanoi</h2>
+                <div class="hanoi-environment" id="hanoiDisplay">
+                    <div class="hanoi-rod-wrap" id="hanoiRodA">
+                        <div class="hanoi-rod-label">A (Source)</div>
+                        <div class="hanoi-disks" id="hanoiDisksA"></div>
+                        <div class="hanoi-rod-peg"></div>
+                    </div>
+                    <div class="hanoi-rod-wrap" id="hanoiRodB">
+                        <div class="hanoi-rod-label">B (Auxiliary)</div>
+                        <div class="hanoi-disks" id="hanoiDisksB"></div>
+                        <div class="hanoi-rod-peg"></div>
+                    </div>
+                    <div class="hanoi-rod-wrap" id="hanoiRodC">
+                        <div class="hanoi-rod-label">C (Target)</div>
+                        <div class="hanoi-disks" id="hanoiDisksC"></div>
+                        <div class="hanoi-rod-peg"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
     <script src="script.js"></script>
 </body>
-
 </html>
