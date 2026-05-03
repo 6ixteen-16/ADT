@@ -1391,7 +1391,7 @@ function renderHanoiRod(rodId) {
     const maxDisks = hanoiDiskCount || 7;
     const maxWidth = 200;
     const minWidth = 30;
-    [...stack].reverse().forEach(disk => {
+    [...stack].forEach(disk => {
         const el = document.createElement('div');
         el.className = 'hanoi-disk';
         const ratio = (disk / maxDisks);
